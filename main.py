@@ -15,7 +15,7 @@ PLANTUML_URL = "https://github.com/plantuml/plantuml/releases/latest/download/pl
 class UMLProcessor:
     def __init__(self):
         self.directory: str = ""
-        self.files: list[str,...] = []
+        self.files: list[str] = []
     def __is_linux(self) -> bool:
         return platform.system() == "Linux"
     def __get_files(self) -> bool:
@@ -52,7 +52,7 @@ class UMLProcessor:
                     logging.error(f"Error coverting {file}: {error}")
         # Cleaning the folder:
         self.__cleanup(compress = ["puml"], delete = ["png"])
-    def __cleanup(self, compress: list[str, ...] | None = None, delete: list[str, ...] | None = None) -> None:
+    def __cleanup(self, compress: list[str] | None = None, delete: list[str] | None = None) -> None:
         compress = compress or []
         delete = delete or []
         if not self.__is_linux():
@@ -76,23 +76,23 @@ class UMLProcessor:
                     os.remove(file)
                     logging.info(f"Removed: {file}")
             except subprocess.CalledProcessError as error:
-                logging.error(f"Erro ao compactar arquivos .{ext}: {error}")
+                logging.error(f"Error compressing files .{ext}: {error}")
         # Direct Deletion:
         for ext in delete:
             files_to_delete = glob.glob(os.path.join(self.directory, f"*.{ext}"))
             if not files_to_delete:
                 logging.warning(f"No files .{ext} found to delete.")
                 continue
-            confirm = input(f"Você realmente deseja excluir todos os arquivos .{ext}? (y/n): ").strip().lower()
+            confirm = input(f"Do you really want to delete all files? .{ext}? (y/n): ").strip().lower()
             if confirm != "y":
-                logging.info(f"Exclusão de arquivos .{ext} cancelada.")
+                logging.info(f"Deleting .{ext} files canceled.")
                 continue
             for file in files_to_delete:
                 try:
                     os.remove(file)
-                    logging.info(f"Removido: {file}")
+                    logging.info(f"Removed: {file}")
                 except OSError as error:
-                    logging.error(f"Erro ao remover {file}: {error}")
+                    logging.error(f"Error removing {file}: {error}")
     def __download_plantuml_jar(self, path: str) -> bool:
         try:
             subprocess.run([
