@@ -1,1 +1,2 @@
 # Directories ignored when pushing to github
+third-party/
